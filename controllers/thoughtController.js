@@ -49,7 +49,7 @@ module.exports = {
         { $pull: { thoughts: req.params.thoughtId } }
       );
 
-      res.json({ message: 'Thought and associated user(s) deleted!' });
+      res.json({ message: 'Thought and associated user deleted!' });
     } catch (err) {
       res.status(500).json(err);
     }
