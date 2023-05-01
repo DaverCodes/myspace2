@@ -1,4 +1,4 @@
-const { Thought, User, Reaction } = require('../models');
+const { Thought, User } = require('../models');
 
 module.exports = {
   // Get all thoughts
@@ -17,7 +17,7 @@ module.exports = {
         .select('-__v');
 
       if (!thought) {
-        return res.status(404).json({ message: 'No thought with that ID' });
+        return res.status(404).json({ message: 'no thoughts to find here. Maybe you chose the wrong ID' });
       }
 
       res.json(thought);
@@ -29,6 +29,18 @@ module.exports = {
   async createThought(req, res) {
     try {
       const thought = await Thought.create(req.body);
+
+      // Add thought reference to user's thoughts array
+      const user = await User.findOneAndUpdate(
+        { _id: thought.username },
+        { $push: { thoughts: thought._id } },
+        { new: true }
+      );
+
+      if (!user) {
+        return res.status(404).json({ message: 'a thought without a mind to have it cannot be shared with the world.' });
+      }
+
       res.json(thought);
     } catch (err) {
       console.log(err);
@@ -41,7 +53,7 @@ module.exports = {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
       if (!thought) {
-        res.status(404).json({ message: 'No thought with that ID' });
+        res.status(404).json({ message: 'you cannot remove a thought that has never existed' });
       }
 
       await User.updateMany(
@@ -49,7 +61,7 @@ module.exports = {
         { $pull: { thoughts: req.params.thoughtId } }
       );
 
-      res.json({ message: 'Thought and associated user deleted!' });
+      res.json({ message: 'This person and their thoughts have been turned to dust' });
     } catch (err) {
       res.status(500).json(err);
     }
