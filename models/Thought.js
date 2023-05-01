@@ -1,4 +1,37 @@
-const { Schema } = require('mongoose');
+const mongoose = require('mongoose');
+const { Schema, Types } = mongoose;
+
+const reactionSchema = new Schema(
+  {
+    reactionId: {
+      type: Types.ObjectId,
+      default: () => new Types.ObjectId()
+    },
+    reactionBody: {
+      type: String,
+      required: true,
+      maxlength: 280
+    },
+    username: {
+      type: String,
+      required: true
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+      get: timestamp => dateFormat(timestamp)
+    }
+  },
+  {
+    toJSON: {
+      getters: true
+    }
+  }
+);
+
+function dateFormat(date) {
+  return Intl.DateTimeFormat('en-US').format(date);
+}
 
 const thoughtSchema = new Schema(
   {
@@ -28,48 +61,12 @@ const thoughtSchema = new Schema(
     id: false,
   }
 );
-
-// Create a virtual property `getTags` that gets the amount of tags associated with an Thought
+  
+// Create a virtual property `reactionCount` that gets the amount of reactions associated with a thought
 thoughtSchema.virtual('reactionCount').get(function () {
   return this.reactions.length;
 });
 
-
-
-const reactionSchema = new Schema(
-  {
-    reactionId: {
-      type: Schema.Types.ObjectId,
-      default: () => new Types.ObjectId()
-    },
-    reactionBody: {
-      type: String,
-      required: true,
-      maxlength: 280
-    },
-    username: {
-      type: String,
-      required: true
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-      get: timestamp => dateFormat(timestamp)
-    }
-  },
-  {
-    toJSON: {
-      getters: true
-    }
-  }
-);
-
-function dateFormat(date) {
-  return Intl.DateTimeFormat('en-US').format(date);
-}
-
-module.exports = {reactionSchema};
-
 const Thought = mongoose.model('Thought', thoughtSchema);
 
-module.exports = {Thought};
+module.exports = { Thought, reactionSchema };
