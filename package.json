@@ -2,11 +2,11 @@
   "name": "myspace2",
   "version": "1.0.1",
   "description": "its like social media but all back end",
-  "main": "index.js",
+  "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index",
+    "start": "node server",
+    "dev": "nodemon server",
     "seed": "node utils/seed"
   },
   "dependencies": {

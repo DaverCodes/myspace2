@@ -62,8 +62,8 @@ const userController = {
     User.findOneAndUpdate(
       { _id: req.params.userId },
       { $set: req.body },
-      { new: true, runValidators: true }
-    )
+      { new: true, runValidators: true })
+      
       .then((dbUserData) => {
         if (!dbUserData) {
           res.status(404).json({ message: 'This User does not exist. Maybe you obliterated them?' });

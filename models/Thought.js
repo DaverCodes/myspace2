@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const { Schema, Types } = mongoose;
 
+
+// a reaction Id, a place to put a reaction, a username to make it easier to know who put the reaction there, and a timestamp
 const reactionSchema = new Schema(
   {
     reactionId: {
@@ -22,6 +24,7 @@ const reactionSchema = new Schema(
       get: timestamp => dateFormat(timestamp)
     }
   },
+  // this getter is required for the timestamp
   {
     toJSON: {
       getters: true
@@ -44,7 +47,6 @@ const thoughtSchema = new Schema(
     createdAt: {
       type: Date,
       default: Date.now,
-      // Use a getter method to format timestamp on query
       get: (createdAtVal) => dateFormat(createdAtVal),
     },
     username: {
@@ -71,9 +73,3 @@ const Thought = mongoose.model('Thought', thoughtSchema);
 
 module.exports =  Thought;
 
-// thoughts: [
-//   {
-//       type: Schema.Types.ObjectId,
-//       ref: 'Thought'
-//   }
-// ],
