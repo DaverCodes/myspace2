@@ -2,6 +2,8 @@ const { ObjectId } = require('mongoose').Types;
 const { User } = require('../models');
 
 const userController = {
+
+  // Get ALL users
   getUsers(req, res) {
     User.find({})
       .populate({
@@ -16,10 +18,11 @@ const userController = {
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 
+// Get a single user by their ID 
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
       .populate({
@@ -33,14 +36,14 @@ const userController = {
       .select('-__v')
       .then((dbUserData) => {
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
+          res.status(404).json({ message: 'This User does not exist. Maybe you obliterated them?' });
           return;
         }
         res.json(dbUserData);
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 
@@ -50,10 +53,10 @@ const userController = {
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
-  
+
   // update a user by its _id
   updateUser(req, res) {
     User.findOneAndUpdate(
@@ -63,30 +66,30 @@ const userController = {
     )
       .then((dbUserData) => {
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
+          res.status(404).json({ message: 'This User does not exist. Maybe you obliterated them?' });
           return;
         }
         res.json(dbUserData);
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 
-  // remove a user by its _id
+  // remove a user by their _id
   removeUser(req, res) {
     User.findOneAndDelete({ _id: req.params.userId })
       .then((dbUserData) => {
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
+          res.status(404).json({ message: 'This User does not exist. Maybe you obliterated them already?' });
           return;
         }
-        res.json(dbUserData);
+        res.json(dbUserData, {message: 'User obliterated.. Congrats!'});
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 
@@ -98,16 +101,15 @@ const userController = {
       { new: true, runValidators: true }
     )
       .then((dbUserData) => {
-        // If no user is found, send 404
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
+          res.status(404).json({ message: 'Either you obliterated them or they never existed.' });
           return;
         }
         res.json(dbUserData);
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 
@@ -119,16 +121,15 @@ const userController = {
       { new: true }
     )
       .then((dbUserData) => {
-        // If no user is found, send 404
         if (!dbUserData) {
-          res.status(404).json({ message: 'No user found with this id!' });
+          res.status(404).json({ message: 'User or friend does not exist.' });
           return;
         }
         res.json(dbUserData);
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err,{ message: 'bad route'});
       });
   },
 };
