@@ -1,13 +1,14 @@
 const { Thought, User } = require('../models');
 
 module.exports = {
+
   // Get all thoughts
   async getThoughts(req, res) {
     try {
       const thoughts = await Thought.find();
       res.json(thoughts);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'bad route'});
     }
   },
   // Get a single thought
@@ -22,7 +23,7 @@ module.exports = {
 
       res.json(thought);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'bad route'});
     }
   },
   // Create a thought
@@ -44,7 +45,7 @@ module.exports = {
       res.json({message: "Thought has been created"});
     } catch (err) {
       console.log(err);
-     res.status(500).json(err);
+     res.status(500).json({ message: 'bad route'});
     }
   },
   // Delete a thought
@@ -53,7 +54,7 @@ module.exports = {
       const thought = await Thought.findOneAndDelete({ _id: req.params.thoughtId });
 
       if (!thought) {
-        res.status(404).json({ message: 'you cannot remove a thought that has never existed' });
+        res.status(404).json({ message: 'no thoughts here' });
       }
 
       await User.updateMany(
@@ -61,7 +62,7 @@ module.exports = {
         { $pull: { thoughts: req.params.thoughtId } }
       );
 
-      res.json({ message: 'This person and their thoughts have been turned to dust' });
+      res.json({ message: 'some minds can be changed' });
     } catch (err) {
       res.status(500).json(err);
     }
@@ -76,12 +77,12 @@ module.exports = {
       );
 
       if (!thought) {
-        res.status(404).json({ message: 'No thought with this id!' });
+        res.status(404).json({ message: 'no thoughts here' });
       }
 
       res.json(thought);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'bad route'});
     }
   },
 
@@ -95,18 +96,17 @@ async addReaction(req, res) {
     );
 
     if (!thought) {
-      return res.status(404).json({ message: 'No thought with this id!' });
+      return res.status(404).json({ message: 'that thought doesnt exist' });
     }
 
     res.json(thought);
   } catch (err) {
-    res.status(500).json(err);
-  }
-},
+    res.status(500).json({ message: 'bad route'});
+  }},
 
-// Remove a reaction from a thought
-async removeReaction(req, res) {
-  try {
+  // Remove a reaction from a thought
+  async removeReaction(req, res) {
+    try {
     const thought = await Thought.findOneAndUpdate(
       { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
@@ -114,14 +114,14 @@ async removeReaction(req, res) {
     );
 
     if (!thought) {
-      return res.status(404).json({ message: 'No thought with this id!' });
+      return res.status(404).json({ message: 'that thought doesnt exist' });
     }
 
     res.json(thought);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ message: 'bad route'});
   }
-},
+}};
 
-};
+
 

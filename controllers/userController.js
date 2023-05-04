@@ -18,7 +18,7 @@ const userController = {
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -43,7 +43,7 @@ const userController = {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -53,7 +53,7 @@ const userController = {
       .then((dbUserData) => res.json(dbUserData))
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -73,7 +73,7 @@ const userController = {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -89,7 +89,7 @@ const userController = {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -109,7 +109,7 @@ const userController = {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
   },
 
@@ -129,9 +129,8 @@ const userController = {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err,{ message: 'bad route'});
+        res.status(500).json(err);
       });
-  },
-};
+  }};
 
 module.exports = userController;
