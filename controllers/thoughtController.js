@@ -32,7 +32,7 @@ module.exports = {
 
       // Add thought reference to user's thoughts array
       const user = await User.findOneAndUpdate(
-        { _id: thought.username },
+        { _id: req.body.userId },
         { $push: { thoughts: thought._id } },
         { new: true }
       );
@@ -41,10 +41,10 @@ module.exports = {
         return res.status(404).json({ message: 'a thought without a mind to have it cannot be shared with the world.' });
       }
 
-      res.json(thought);
+      res.json({message: "Thought has been created"});
     } catch (err) {
       console.log(err);
-      return res.status(500).json(err);
+     res.status(500).json(err);
     }
   },
   // Delete a thought
@@ -89,7 +89,7 @@ module.exports = {
 async addReaction(req, res) {
   try {
     const thought = await Thought.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.thoughtId },
       { $push: { reactions: req.body } },
       { new: true, runValidators: true }
     );
@@ -108,7 +108,7 @@ async addReaction(req, res) {
 async removeReaction(req, res) {
   try {
     const thought = await Thought.findOneAndUpdate(
-      { _id: req.params.id },
+      { _id: req.params.thoughtId },
       { $pull: { reactions: { reactionId: req.params.reactionId } } },
       { new: true, runValidators: true }
     );

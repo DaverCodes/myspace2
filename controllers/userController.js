@@ -2,7 +2,6 @@ const { ObjectId } = require('mongoose').Types;
 const { User } = require('../models');
 
 const userController = {
-  // get all users
   getUsers(req, res) {
     User.find({})
       .populate({
@@ -21,7 +20,6 @@ const userController = {
       });
   },
 
-  // get single user by id
   getSingleUser(req, res) {
     User.findOne({ _id: req.params.userId })
       .populate({
@@ -34,7 +32,6 @@ const userController = {
       })
       .select('-__v')
       .then((dbUserData) => {
-        // If no user is found, send 404
         if (!dbUserData) {
           res.status(404).json({ message: 'No user found with this id!' });
           return;
@@ -64,11 +61,6 @@ const userController = {
       { $addToSet: { friends: req.params.friendId } },
       { new: true, runValidators: true }
     )
-      .populate({
-        path: 'friends',
-        select: '-__v',
-      })
-      .select('-__v')
       .then((dbUserData) => {
         // If no user is found, send 404
         if (!dbUserData) {
@@ -90,11 +82,6 @@ const userController = {
       { $pull: { friends: req.params.friendId } },
       { new: true }
     )
-      .populate({
-        path: 'friends',
-        select: '-__v',
-      })
-      .select('-__v')
       .then((dbUserData) => {
         // If no user is found, send 404
         if (!dbUserData) {
