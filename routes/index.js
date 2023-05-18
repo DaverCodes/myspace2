@@ -3,7 +3,7 @@ const apiRoutes = require('./api');
 
 router.use('/api', apiRoutes);
 
-// Define your other routes here
+
 router.get('/', (req, res) => {
   res.send('Myspace2!');
 });

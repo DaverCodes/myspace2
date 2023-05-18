@@ -1,14 +1,13 @@
 const { Thought, User } = require('../models');
 
 module.exports = {
-
   // Get all thoughts
   getThoughts(req, res) {
     Thought.find()
-      .then(thoughts => res.json(thoughts))
+      .then(thoughts => res.json(thoughts)) // Send the retrieved thoughts as a JSON response
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err); // Handle and respond with an error if there's an issue
     });
   },
 
@@ -20,11 +19,11 @@ module.exports = {
         if (!thought) {
           return res.status(404).json({ message: 'no thoughts to find here. Maybe you chose the wrong ID' });
         }
-        res.json(thought);
+        res.json(thought); // Send the retrieved thought as a JSON response
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err); // Handle and respond with an error if there's an issue
     });
   },
 
@@ -43,11 +42,11 @@ module.exports = {
         if (!user) {
           return res.status(404).json({ message: 'a thought without a mind to have it cannot be shared with the world.' });
         }
-        res.json({message: "Thought has been created"});
+        res.json({message: "Thought has been created"}); // Send a success message as a JSON response
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err); // Handle and respond with an error if there's an issue
     });
   },
 
@@ -63,10 +62,10 @@ module.exports = {
           { $pull: { thoughts: req.params.thoughtId } }
         );
       })
-      .then(() => res.json({ message: 'some minds can be changed' }))
+      .then(() => res.json({ message: 'some minds can be changed' })) // Send a success message as a JSON response
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err); // Handle and respond with an error if there's an issue
     });
   },
 
@@ -81,51 +80,15 @@ module.exports = {
         if (!thought) {
           res.status(404).json({ message: 'no thoughts here' });
         }
-        res.json(thought);
+        res.json(thought); // Send the updated thought as a JSON response
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).json(err);
+        res.status(500).json(err); // Handle and respond with an error if there's an issue
     });
   },
 
   // Add a reaction to a thought
   addReaction(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $push: { reactions: req.body } },
-      { new: true, runValidators: true })
-
-      .then(thought => {
-        if (!thought) {
-          return res.status(404).json({ message: 'that thought doesnt exist' });
-        }
-        res.json(thought);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-    });
-  },
-  
-  // Remove a reaction from a thought
-  async removeReaction(req, res) {
-    try {
-    const thought = await Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
-      { $pull: { reactions: { reactionId: req.params.reactionId } } },
-      { new: true, runValidators: true }
-    );
-
-    if (!thought) {
-      return res.status(404).json({ message: 'that thought doesnt exist' });
-    }
-
-    res.json(thought);}
-     catch (err) {
-      res.status(500).json(err);
-    }
-}};
-
-
-
+      { _id: req.params
